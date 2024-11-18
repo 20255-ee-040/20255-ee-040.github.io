@@ -9,6 +9,7 @@
   <h1>Message Event Test</h1>
   <button id="sendMessage">Send JSON Message</button>
   <button id="sendInvalidMessage">Send Invalid JSON Message</button>
+  <div id="output" style="margin-top: 20px; border: 1px solid #000; padding: 10px;"></div>
 
   <script>
     // Function to validate if a string is valid JSON
@@ -21,17 +22,25 @@
       }
     }
 
+    // Function to display messages on the HTML page
+    function displayMessage(message) {
+      const outputDiv = document.getElementById("output");
+      const newMessage = document.createElement("p");
+      newMessage.textContent = message;
+      outputDiv.appendChild(newMessage);
+    }
+
     // Event listener for message events
     window.addEventListener("message", function (event) {
-      console.log("Received message:", event.data);
+      displayMessage("Received message: " + event.data);
 
       if (!isJSONValid(event.data)) {
-        console.log("Invalid JSON received");
+        displayMessage("Invalid JSON received");
         return;
       }
 
       const eventData = JSON.parse(event.data);
-      console.log("Parsed JSON data:", eventData);
+      displayMessage("Parsed JSON data: " + JSON.stringify(eventData));
     });
 
     // Button to send a valid JSON message
