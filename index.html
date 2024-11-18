@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Message Event Test</title>
+</head>
+<body>
+  <h1>Message Event Test</h1>
+  <button id="sendMessage">Send JSON Message</button>
+  <button id="sendInvalidMessage">Send Invalid JSON Message</button>
+
+  <script>
+    // Function to validate if a string is valid JSON
+    function isJSONValid(str) {
+      try {
+        JSON.parse(str);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    // Event listener for message events
+    window.addEventListener("message", function (event) {
+      console.log("Received message:", event.data);
+
+      if (!isJSONValid(event.data)) {
+        console.log("Invalid JSON received");
+        return;
+      }
+
+      const eventData = JSON.parse(event.data);
+      console.log("Parsed JSON data:", eventData);
+    });
+
+    // Button to send a valid JSON message
+    document.getElementById("sendMessage").addEventListener("click", function () {
+      window.postMessage(JSON.stringify({ key: "value" }), "*");
+    });
+
+    // Button to send an invalid JSON message
+    document.getElementById("sendInvalidMessage").addEventListener("click", function () {
+      window.postMessage("Invalid JSON String", "*");
+    });
+  </script>
+</body>
+</html>
